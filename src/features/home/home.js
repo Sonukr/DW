@@ -10,6 +10,8 @@ import {ItemCard} from '../../components/card';
 import {Search} from '../../components/search';
 import {isEmpty} from 'lodash'
 import {Fragment} from 'react';
+import {SetCurrentCard} from '../../actions/setCurrentCard';
+import {SetCurrentBundle} from '../../actions/setCurrentBundle';
 
 type Props = {
   dispatch: Object,
@@ -34,16 +36,19 @@ class HomeProxy extends React.Component<Props> {
 
   componentDidMount(): void {
     this.dialApi()
-
-
   }
 
-  dialApi = () => {
-    this.getInitialData()
+  dialApi = (details?:boolean) => {
+    if(details) {
+      this.getDetails();
+    }else{
+      this.getInitialData();
+    }
+
   }
 
   getInitialData = async () => {
-    const url = `https://app.dataweave.com/v6/app/retailer/bundles/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&start=${this.state.startCount}&limit=${this.state.limit}&sort_on=&sort_by=&filters={ "search":"${this.state.search}"}`
+    const url = `bundles/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&start=${this.state.startCount}&limit=${this.state.limit}&sort_on=&sort_by=&filters={ "search":"${this.state.search}"}`
     const api = new Api();
     const data = await api.get(url);
     const prepreData = {
@@ -52,6 +57,17 @@ class HomeProxy extends React.Component<Props> {
     }
 
     this.props.dispatch(new SetData(prepreData).plainAction())
+  }
+
+  getDetails = async () => {
+    const bundle_id = this.props.currentCard.bundle_id;
+    console.log(this.state.currentCard.bundle_id);
+    const url = `bundle_overview/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&bundle_id=${bundle_id}`;
+    const api = new Api();
+    const data = await api.get(url);
+    const prepreData = data.data.data;
+    console.log(data.data.data)
+    this.props.dispatch(new SetCurrentBundle(prepreData).plainAction())
   }
 
   handleMenuClick = async (e) => {
@@ -83,18 +99,15 @@ class HomeProxy extends React.Component<Props> {
     this.dialApi();
   }
 
-  handleCardClick = (data: Object) => {
-    this.setState({
-      currentCard: data
-    })
-    console.log(data)
+  handleCardClick = async (data: Object) => {
+    await this.props.dispatch(new SetCurrentCard(data).plainAction());
+    await this.dialApi(true);
   }
 
   render () {
     const baseView = this.props.baseView;
-    const cardItemdata = this.props.data[baseView].data || [];
-    const currentCard = this.state.currentCard ;
-    console.log(cardItemdata)
+    const cardItemdata = this.props.data[baseView]? this.props.data[baseView].data: [];
+    const currentCard = this.props.currentCard ;
     return (
       <div className={'container-fluid'}>
         <div className="row">
@@ -118,7 +131,6 @@ class HomeProxy extends React.Component<Props> {
           <div className="col-md-4">
             <div className={styles.filterWrapper}>
                 <Search onSubmit={this.onSearchSubmit} value={this.state.search} onChange={(e) => this.handleChange(e)}/>
-              <Search onSubmit={this.onSearchSubmit} value={this.state.search} onChange={(e) => this.handleChange(e)}/>
             </div>
             <Section  className={styles.sectionWrappperTwo}>
 
@@ -153,7 +165,8 @@ class HomeProxy extends React.Component<Props> {
 
 const mapStateToProps = state => ({
   data: state.data,
-  baseView: state.baseView
+  baseView: state.baseView,
+  currentCard: state.currentCard
 })
 
 export const Home = connect(mapStateToProps)(HomeProxy)

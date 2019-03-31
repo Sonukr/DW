@@ -1,6 +1,5 @@
 
 import axios from 'axios';
-import {baseUrl} from './baseUrl';
 
 
 /**
@@ -24,9 +23,7 @@ export class Api {
    * @returns {string} absoluteUrl
    */
   buildAbsoluteUrl (url) {
-    return url;
-    // return `${this.baseUrl}/${apiUrl}/${url}`;
-    // return `${this.baseUrl}/${url}`;
+    const baseUrl = 'https://app.dataweave.com/v6/app/retailer';
+    return `${baseUrl}/${url}`;
   }
-
 }

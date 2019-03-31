@@ -1,0 +1,58 @@
+:local(.scrollWrapper) {
+  min-height: calc(95vh - 8px);
+  max-height: calc(95vh - 8px);
+  overflow: auto;
+  border-right: 1px solid rgba(151, 151, 151, 0.18);
+  padding: 12px;
+  padding-bottom: 50px;
+}
+
+
+:local(.cardWrapper){
+  background: #fff;
+  box-shadow: 0 4px 15px 0 rgba(7,42,68,.1);
+  padding: 12px;
+  margin-bottom: 12px;
+  margin: 12px;
+  border-radius: 4px;
+  display: flex;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+:local(.cardWrapperActive) {
+  margin: 3px;
+  
+}
+
+:local(.cardDetails .price) {
+  color: #6182ba;
+}
+:local(.cardDetails .title) {
+  color: #373c43;
+  font-size: 16px;
+
+}
+:local(.cardDetails .sku) {
+  color: #929193;
+}
+:local(.cardDetails .increment) {
+  color: #6789c1;
+  margin-bottom: 0;
+
+}
+:local(.cardDetails .opty) {
+  color: #6789c1;
+  margin-bottom: 3px;
+}
+:local(.cardDetails span) {
+  color: #d5246f;
+}
+
+:local(.cardImage img) {
+  max-width: 120px;
+}
+
+:local(.searchWrapper) {
+  padding: 12px;
+  width: 100%;
+}

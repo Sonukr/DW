@@ -41,12 +41,12 @@
 
 :local(.sortingWrapper){
     flex: 1;
-    padding: 16px;
+    padding: 18px;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    margin-top: 4px;
     position: relative;
+    border-left: 1px solid #d6d9dc;
 }
 
 :local(.sortMenu) {
@@ -57,6 +57,7 @@
     top: 58px;
     box-shadow: 0 4px 15px 0 rgba(7,42,68,.1);
     display: none;
+    
 }
 
 :local(.sortingWrapper:hover .sortMenu){

@@ -151,7 +151,6 @@ class HomeProxy extends React.Component<Props> {
                 <div className={styles.noDataWrapper}>
                   <p className={styles.noData}>No results for your query.</p>
                 </div>:
-
                 <Fragment>
                   {
                     cardItemdata.map((data) => (
@@ -165,7 +164,11 @@ class HomeProxy extends React.Component<Props> {
                   }
                 </Fragment>
               }
+              <div className={'text-center'}>
+                <button type="button" className="btn btn-primary">Load more items</button>
+              </div>
             </Section>
+
           </div>
 
           <div className="col-md-5">
@@ -174,9 +177,12 @@ class HomeProxy extends React.Component<Props> {
                 {isEmpty(this.props.currentBundle) ?
                   <p className={styles.noData}>Please select a card from left
                     side.</p> :
-                  <ItemCard item={this.props.currentBundle} key={'d'}
-                            onClick={() => this.handleCardClick(null)}
-                  />
+                  <div>
+                    <p className={'text-right mr-3'} onClick={() => this.props.dispatch(new SetCurrentBundle({}).plainAction())}>Clear</p>
+                    <ItemCard item={this.props.currentBundle} key={'d'}
+                              onClick={() => this.handleCardClick(null)}
+                    />
+                  </div>
                 }
               </div>
             </Section>

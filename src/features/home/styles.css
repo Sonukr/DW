@@ -73,6 +73,38 @@
     align-items: center;
     cursor: pointer;
     margin-top: 4px;
+    position: relative;
+}
+
+:local(.sortMenu) {
+    position: absolute;
+    min-width: 200px;
+    background-color: #fff;
+    right: 3px;
+    top: 58px;
+    box-shadow: 0 4px 15px 0 rgba(7,42,68,.1);
+    display: none;
+}
+
+:local(.sortingWrapper:hover .sortMenu){
+    display: initial;
+}
+
+:local(.sortMenu ul) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+:local(.sortMenu li) {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(214, 214, 214, 0.42);
+    font-size: 14px;
+}
+
+:local(.sortMenu li:hover) {
+    background-color: rgba(183, 177, 177, 0.12);;
+    color: #000;
 }
 
 :local(.noData) {

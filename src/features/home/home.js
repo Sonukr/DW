@@ -135,6 +135,18 @@ class HomeProxy extends React.Component<Props> {
                 <Search onSubmit={this.onSearchSubmit} value={this.state.search} onChange={(e) => this.handleChange(e)}/>
                 <div className={styles.sortingWrapper}>
                   <i className="fas fa-sort"></i>
+                  <div className={styles.sortMenu}>
+                    <ul>
+                      <li>Price - high to low</li>
+                      <li>Price - low to high</li>
+                      <li>Discount % - hight to low</li>
+                      <li>Discount % - low to high</li>
+                      <li>Increase % - hight to low</li>
+                      <li>Increase % - low to high</li>
+                      <li>Decrease % - hight to low</li>
+                      <li>Decrease % - low to high</li>
+                    </ul>
+                  </div>
                 </div>
             </div>
             <Section  className={styles.sectionWrappperTwo}>
@@ -147,9 +159,11 @@ class HomeProxy extends React.Component<Props> {
                 <Fragment>
                   {
                     cardItemdata.map((data) => (
-                      <ItemCard item={data} key={data.bundle_id}
-                                onClick={() => this.handleCardClick(data)}
-                                isActive={data.bundle_id === currentCard.bundle_id}
+                      <ItemCard
+                        item={data}
+                        key={data.bundle_id}
+                        onClick={() => this.handleCardClick(data)}
+                        isActive={data.bundle_id === currentCard.bundle_id}
                       />
                     ))
                   }

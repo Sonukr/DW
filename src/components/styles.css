@@ -56,3 +56,31 @@
   padding: 12px;
   width: 100%;
 }
+
+
+:local(.menuWrapper span:nth-child(2)) {
+  color: #82d0e4;
+  font-weight: 600;
+  
+}
+
+:local(.menuWrapper ul) {
+  padding: 0;
+  margin: 0;
+}
+
+:local(.menuWrapper li) {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(210, 210, 210, 0.31);
+}
+
+:local(.menuWrapper p) {
+  color: #5d98e7;
+  font-weight: 700;
+  margin-bottom: 6px;
+  
+}

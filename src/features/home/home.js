@@ -12,6 +12,8 @@ import {isEmpty} from 'lodash'
 import {Fragment} from 'react';
 import {SetCurrentCard} from '../../actions/setCurrentCard';
 import {SetCurrentBundle} from '../../actions/setCurrentBundle';
+import {MenuList} from '../../components/menuList';
+import {Filter} from '../../components/filter';
 
 type Props = {
   dispatch: Object,
@@ -29,7 +31,7 @@ class HomeProxy extends React.Component<Props> {
       startCount: 0,
       limit: 20,
       search: "",
-      currentCard: {}
+      currentFilter: {}
     }
 
   }
@@ -48,7 +50,7 @@ class HomeProxy extends React.Component<Props> {
   }
 
   getInitialData = async () => {
-    const url = `bundles/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&start=${this.state.startCount}&limit=${this.state.limit}&sort_on=&sort_by=&filters={ "search":"${this.state.search}"}`
+    const url = `bundles/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&start=${this.state.startCount}&limit=${this.state.limit}&sort_on=${this.state.currentFilter.sort_on}&sort_by=${this.state.currentFilter.sort_by}&filters={ "search":"${this.state.search}"}`
     const api = new Api();
     const data = await api.get(url);
     const prepreData = {
@@ -61,7 +63,6 @@ class HomeProxy extends React.Component<Props> {
 
   getDetails = async () => {
     const bundle_id = this.props.currentCard.bundle_id;
-    console.log(this.state.currentCard.bundle_id);
     const url = `bundle_overview/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&bundle_id=${bundle_id}`;
     const api = new Api();
     const data = await api.get(url);
@@ -72,6 +73,9 @@ class HomeProxy extends React.Component<Props> {
 
   handleMenuClick = async (e) => {
     await this.props.dispatch(new SetBaseView(e).plainAction());
+    this.setState({
+      currentFilter: {}
+    });
     const keys = Object.keys(this.props.data);
     if(keys.includes(e)){
       return null
@@ -101,6 +105,17 @@ class HomeProxy extends React.Component<Props> {
     this.dialApi();
   }
 
+  handleFilter = (data: Object) => {
+    this.setState({
+      currentFilter: data
+    }, () => this.processFilter())
+  }
+
+  processFilter = async () => {
+    console.log(this.state.currentFilter)
+    await this.dialApi();
+  }
+
   handleCardClick = async (data: Object) => {
     await this.props.dispatch(new SetCurrentCard(data).plainAction());
     await this.dialApi(true);
@@ -115,42 +130,23 @@ class HomeProxy extends React.Component<Props> {
         <div className="row">
           <div className="col-md-3">
             <Section className={styles.sectionWrappperOne}>
-              <div  className={styles.menuWrapper}>
-                <p>Views</p>
-                <ul>
-                  <li onClick={() => this.handleMenuClick('all_products')}>
-                    <span>All products</span>
-                    <span>1126</span>
-                  </li>
-                  <li onClick={() => this.handleMenuClick('increase_opportunity')}>
-                    <span>Margin gain opportunities</span>
-                    <span>27</span>
-                  </li>
-                </ul>
-              </div>
+              <MenuList handleMenuClick={this.handleMenuClick}/>
             </Section>
           </div>
           <div className="col-md-4">
             <div className={styles.filterWrapper}>
-                <Search onSubmit={this.onSearchSubmit} value={this.state.search} onChange={(e) => this.handleChange(e)}/>
+                <Search onSubmit={this.onSearchSubmit}
+                  value={this.state.search}
+                  onChange={(e) => this.handleChange(e)}
+                />
                 <div className={styles.sortingWrapper}>
                   <i className="fas fa-sort"></i>
                   <div className={styles.sortMenu}>
-                    <ul>
-                      <li>Price - high to low</li>
-                      <li>Price - low to high</li>
-                      <li>Discount % - hight to low</li>
-                      <li>Discount % - low to high</li>
-                      <li>Increase % - hight to low</li>
-                      <li>Increase % - low to high</li>
-                      <li>Decrease % - hight to low</li>
-                      <li>Decrease % - low to high</li>
-                    </ul>
+                    <Filter handleFilter={this.handleFilter}/>
                   </div>
                 </div>
             </div>
             <Section  className={styles.sectionWrappperTwo}>
-
               {isEmpty(cardItemdata) ?
                 <div className={styles.noDataWrapper}>
                   <p className={styles.noData}>No results for your query.</p>
@@ -169,7 +165,6 @@ class HomeProxy extends React.Component<Props> {
                   }
                 </Fragment>
               }
-
             </Section>
           </div>
 

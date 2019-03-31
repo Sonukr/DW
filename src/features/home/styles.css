@@ -22,7 +22,7 @@
 }
 
 :local(.sectionWrappperOne){
-
+    background-color: #fff;
 }
 
 :local(.sectionWrappperTwo){
@@ -64,6 +64,15 @@
     display: flex;
     background: #edf2f5;
     border-bottom: 1px solid #1714141c;
+}
+
+:local(.sortingWrapper){
+    flex: 1;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 4px;
 }
 
 :local(.noData) {

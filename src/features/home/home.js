@@ -96,6 +96,8 @@ class HomeProxy extends React.Component<Props> {
 
   onSearchSubmit = (e?: any) => {
     e.preventDefault()
+    this.props.dispatch(new SetCurrentBundle({}).plainAction());
+    this.props.dispatch(new SetCurrentCard({}).plainAction());
     this.dialApi();
   }
 
@@ -131,11 +133,17 @@ class HomeProxy extends React.Component<Props> {
           <div className="col-md-4">
             <div className={styles.filterWrapper}>
                 <Search onSubmit={this.onSearchSubmit} value={this.state.search} onChange={(e) => this.handleChange(e)}/>
+                <div className={styles.sortingWrapper}>
+                  <i className="fas fa-sort"></i>
+                </div>
             </div>
             <Section  className={styles.sectionWrappperTwo}>
 
               {isEmpty(cardItemdata) ?
-                <p className={styles.noData}>No results for your query.</p> :
+                <div className={styles.noDataWrapper}>
+                  <p className={styles.noData}>No results for your query.</p>
+                </div>:
+
                 <Fragment>
                   {
                     cardItemdata.map((data) => (
@@ -153,7 +161,15 @@ class HomeProxy extends React.Component<Props> {
 
           <div className="col-md-5">
             <Section  className={styles.sectionWrappperThree}>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo illo incidunt ratione! Accusamus aliquam blanditiis debitis, dolor eligendi, error excepturi illo ipsam molestiae quae quas quod repudiandae sequi similique sint.</p>
+              <div className={styles.noDataWrapper}>
+                {isEmpty(this.props.currentBundle) ?
+                  <p className={styles.noData}>Please select a card from left
+                    side.</p> :
+                  <ItemCard item={this.props.currentBundle} key={'d'}
+                            onClick={() => this.handleCardClick(null)}
+                  />
+                }
+              </div>
             </Section>
           </div>
 
@@ -166,7 +182,8 @@ class HomeProxy extends React.Component<Props> {
 const mapStateToProps = state => ({
   data: state.data,
   baseView: state.baseView,
-  currentCard: state.currentCard
+  currentCard: state.currentCard,
+  currentBundle: state.currentBundle
 })
 
 export const Home = connect(mapStateToProps)(HomeProxy)

@@ -6,7 +6,7 @@ import clasnames from 'classnames';
 type Props = {
   item: Object,
   onClick?: Function,
-  isActive: boolean
+  isActive?: boolean
 }
 
 /* features  > ItemCard */
@@ -21,7 +21,7 @@ export class ItemCard extends React.Component<Props> {
           <h5 className={styles.title}>{item.bundle_name}</h5>
           <p className={styles.sku}>{item.sku}</p>
           <p className={styles.increment}>Increased upto
-            <span><i className="fas fa-rupee-sign"></i>  {item.price_opportunity_increase_by === 'NA' ? '-': item.price_opportunity_increase_by } </span>
+            <span> <i className="fas fa-rupee-sign"></i>  {item.price_opportunity_increase_by === 'NA' ? '-': item.price_opportunity_increase_by } </span>
             <span>({item.price_opportunity_increase_by_percentage === 'NA' ? '-':  item.price_opportunity_increase_by_percentage}%)</span>
           </p>
           <p className={styles.opty}>Oppertunity exist from last <span>{item.price_opportunity_days}</span> day(s)</p>

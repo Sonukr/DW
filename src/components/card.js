@@ -80,11 +80,6 @@ export class ItemCardDetails extends React.Component<Props> {
               {item.out_of_stock_seed_days ?
                 <p className={styles.opty}>Out of stock from  <span>{item.out_of_stock_seed_days}</span> day(s)</p>:
                 <Fragment>
-                  {/*<p className={styles.increment}>Increased upto*/}
-                    {/*<span> <i className="fas fa-rupee-sign"></i>  {item.price_opportunity_increase_by === 'NA' ? '-': item.price_opportunity_increase_by } </span>*/}
-                    {/*<span>({item.price_opportunity_increase_by_percentage === 'NA' ? '-':  item.price_opportunity_increase_by_percentage}%)</span>*/}
-                  {/*</p>*/}
-                  {/*<p className={styles.opty}>Oppertunity exist from last <span>{item.price_opportunity_days}</span> day(s)</p>*/}
                   <div className={styles.tableRow}>
                     <p>
                       <span>Your Price</span>

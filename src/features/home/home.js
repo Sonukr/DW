@@ -40,24 +40,35 @@ class HomeProxy extends React.Component<Props> {
     this.dialApi()
   }
 
-  dialApi = (details?:boolean) => {
+  dialApi = (details?:boolean, append?: boolean) => {
     if(details) {
       this.getDetails();
     }else{
-      this.getInitialData();
+      this.getInitialData(append);
     }
-
   }
 
-  getInitialData = async () => {
+  getInitialData = async (append?: boolean) => {
     const url = `bundles/?&api_key=38430b87ac715c5858b7de91fb90b3f7&base_view=${this.props.baseView}&start=${this.state.startCount}&limit=${this.state.limit}&sort_on=${this.state.currentFilter.sort_on}&sort_by=${this.state.currentFilter.sort_by}&filters={ "search":"${this.state.search}"}`
     const api = new Api();
     const data = await api.get(url);
-    const prepreData = {
-      ...this.props.data,
-      [this.props.baseView]: data.data
+    let prepreData = {};
+    if(append) {
+      const appendData = data.data.data;
+      const finalData = this.props.data[this.props.baseView] ? [...this.props.data[this.props.baseView]['data'], ...appendData] :[...appendData]
+      prepreData = {
+        ...this.props.data,
+        [this.props.baseView]: {
+          ...data.data,
+          data: finalData
+        }
+      }
+    } else{
+        prepreData = {
+          ...this.props.data,
+          [this.props.baseView]: data.data
+        }
     }
-
     this.props.dispatch(new SetData(prepreData).plainAction())
   }
 
@@ -92,7 +103,10 @@ class HomeProxy extends React.Component<Props> {
       // this.onSearchSubmit();
     }else {
       this.setState({
-        search: `${e.target.value}`
+        search: `${e.target.value}`,
+        startCount: 0,
+        limit: 20,
+        currentFilter: {}
       })
     }
 
@@ -106,7 +120,11 @@ class HomeProxy extends React.Component<Props> {
   }
 
   handleFilter = (data: Object) => {
+    const baseView = this.props.baseView;
+    const cardItemdata = this.props.data[baseView]? this.props.data[baseView].data: [];
     this.setState({
+      startCount: 0,
+      limit: cardItemdata.length,
       currentFilter: data
     }, () => this.processFilter())
   }
@@ -121,8 +139,10 @@ class HomeProxy extends React.Component<Props> {
     await this.dialApi(true);
   }
 
-  handlePaginantion = () => {
-    console.log("sdsd")
+  handlePaginantion = async () => {
+    this.setState({
+      startCount: parseInt(this.state.startCount + 20)
+    }, await this.dialApi(null, true));
   }
 
   render () {
@@ -159,10 +179,10 @@ class HomeProxy extends React.Component<Props> {
                 </div>:
                 <Fragment>
                   {
-                    cardItemdata.map((data) => (
+                    cardItemdata.map((data, i) => (
                       <ItemCard
                         item={data}
-                        key={data.bundle_id}
+                        key={i}
                         onClick={() => this.handleCardClick(data)}
                         isActive={data.bundle_id === currentCard.bundle_id}
                       />

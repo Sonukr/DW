@@ -6,7 +6,7 @@ import {Api} from '../../services/api';
 import {connect} from 'react-redux';
 import {SetData} from '../../actions/setData';
 import {SetBaseView} from '../../actions/setBaseView';
-import {ItemCard} from '../../components/card';
+import {ItemCard, ItemCardDetails} from '../../components/card';
 import {Search} from '../../components/search';
 import {isEmpty} from 'lodash'
 import {Fragment} from 'react';
@@ -121,10 +121,16 @@ class HomeProxy extends React.Component<Props> {
     await this.dialApi(true);
   }
 
+  handlePaginantion = () => {
+    console.log("sdsd")
+  }
+
   render () {
     const baseView = this.props.baseView;
     const cardItemdata = this.props.data[baseView]? this.props.data[baseView].data: [];
     const currentCard = this.props.currentCard ;
+    const count = this.props.data[baseView] ? this.props.data[baseView].count : 0;
+    const remainingCount = count - cardItemdata.length
     return (
       <div className={'container-fluid'}>
         <div className="row">
@@ -164,9 +170,14 @@ class HomeProxy extends React.Component<Props> {
                   }
                 </Fragment>
               }
-              <div className={'text-center'}>
-                <button type="button" className="btn btn-primary">Load more items</button>
-              </div>
+              {remainingCount > 0 ?
+                <div className={'text-center'}>
+                  <button type="button" className="btn btn-primary"
+                          onClick={this.handlePaginantion}>
+                    Load more {remainingCount} items
+                  </button>
+                </div> : ""
+              }
             </Section>
 
           </div>
@@ -179,7 +190,7 @@ class HomeProxy extends React.Component<Props> {
                     side.</p> :
                   <div>
                     <p className={'text-right mr-3'} onClick={() => this.props.dispatch(new SetCurrentBundle({}).plainAction())}>Clear</p>
-                    <ItemCard item={this.props.currentBundle} key={'d'}
+                    <ItemCardDetails item={this.props.currentBundle} key={'d'}
                               onClick={() => this.handleCardClick(null)}
                     />
                   </div>
